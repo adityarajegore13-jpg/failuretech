@@ -5,10 +5,13 @@ import { cookies } from "next/headers";
  * Creates an async Supabase client for Server Components, Server Actions, and Route Handlers.
  * In Next.js App Router (15+), cookies() returns a Promise.
  */
-export async function createClient() {
-  const cookieStore = await cookies();
+export async function createClient(cookieStoreParam?: Awaited<ReturnType<typeof cookies>>) {
+  const cookieStore = cookieStoreParam || (await cookies());
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder-url.supabase.co";
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key";
+  const supabaseAnonKey =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    "placeholder-anon-key";
 
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
