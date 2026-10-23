@@ -47,6 +47,12 @@ export async function loginAction(
   });
 
   if (error || !data.user) {
+    if (error?.message?.toLowerCase().includes("email not confirmed")) {
+      return {
+        error:
+          "Email not confirmed. To disable email confirmation for local/demo testing: in Supabase Dashboard go to Authentication > Providers > Email, turn OFF 'Confirm email', and click Save.",
+      };
+    }
     return {
       error: error?.message || "Invalid email or password. Please verify your credentials.",
     };
