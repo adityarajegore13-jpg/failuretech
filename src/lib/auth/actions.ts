@@ -120,6 +120,12 @@ export async function signupAction(
   });
 
   if (error) {
+    if (error.message.toLowerCase().includes("rate limit")) {
+      return {
+        error:
+          "Supabase email rate limit exceeded (free tier allows only 3-4 emails/hr). To bypass this completely: in Supabase Dashboard go to Authentication > Providers > Email, turn OFF 'Confirm email', and click Save. Signups will then succeed instantly with no emails sent!",
+      };
+    }
     return { error: error.message };
   }
 
